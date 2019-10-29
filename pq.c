@@ -33,7 +33,7 @@ void pop()
 {
 	list *temp;
 	if(start == NULL)
-		printf("Queue Underflow\n");
+		printf("Queue Underflow and exit\n");
 	else
 	{
 		temp = start;
