@@ -1,27 +1,29 @@
 #include<stdio.h>
 #include<malloc.h>
+#include <stdlib.h>
+
 typedef struct record{
 	int priority;
 	int info;
 	struct record *next;
-};
-typedef struct record list;
-list *start = NULL;
+}list;
+
 //TO INSERT BASED ON PRIORITY
-void push(int value,int priority)
-{
+void push(list **start,int value,int priority){
+    
 	list *temp,*q;
 	temp =(list*)malloc(sizeof(list));
 	temp->info = value;
 	temp->priority = priority;
-	if(start == NULL || priority > start->priority )
+	
+	if(*start == NULL || priority > (*start)->priority )
 	{
-		temp->next = start;
-		start = temp;
+		temp->next = *start;
+		*start = temp;
 	}
 	else
 	{
-		q = start;
+		q = *start;
         while(q->next != NULL && q->next->priority >= priority )
             q=q->next;
             temp->next = q->next;
@@ -29,25 +31,26 @@ void push(int value,int priority)
 	}
 }
 //TO DELETE ELEMENT WITH TOPMOST PRIORITY
-void pop()
-{
+
+void pop(list **start){
 	list *temp;
-	if(start == NULL)
+	if((*start) == NULL)
 		printf("Queue Underflow and exit\n");
 	else
 	{
-		temp = start;
-		printf("Deleted item is %d\n",temp->info);
-		start = start->next;
+		temp = *start;
+		printf("Deleted item is %d and its priority is %d\n",temp->info,temp->priority);
+		*start = (*start)->next;
 		free(temp);
 	}
 }
+
 //TO PRINT THE QUEUE.
-void display()
-{
+
+void display(list **start){
 	list *ptr;
-	ptr = start;
-	if(start == NULL)
+	ptr = *start;
+	if((*start) == NULL)
 		printf("Queue is empty\n");
 	else
 	{
@@ -61,8 +64,10 @@ void display()
 	}
 }
 //MAINFUNC
+
 int main()
 {
+    	list *start = NULL;
 	int choice,value,priority;
 	do
 	{
@@ -79,13 +84,13 @@ int main()
 				scanf("%d",&value);
 				printf("Enter its priority : ");
 				scanf("%d",&priority);
-				push(value,priority);
+				push(&start,value,priority);
 				break;
 			case 2:
-				pop();
+				pop(&start);
 				break;
 			case 3:
-				display();
+				display(&start);
 				break;
              case 4:
 			    exit(0);
@@ -94,5 +99,6 @@ int main()
 				printf("Wrong choice\n");
 		}
 	}while(choice!=4);
+
 	return 0;
 }
